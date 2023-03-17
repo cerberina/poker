@@ -9,4 +9,8 @@ Gem::Specification.new do |s|
   s.homepage =
     "https://rubygems.org/gems/poker_cerberina"
   s.license = "MIT"
+
+  s.add_development_dependency "debug"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "bundler"
 end

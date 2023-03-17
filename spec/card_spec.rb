@@ -18,27 +18,38 @@ describe PokerCerberina::Card do
   end
 
   describe "#<=>" do
-    it "is equal for cards with same rank" do
-      card_a = PokerCerberina::Card.new("Q", "♦︎")
-      card_b = PokerCerberina::Card.new("Q", "♥︎")
-      expect(card_a == card_b).to eq true
+    it "returns 0 for cards with same rank but different suit" do
+      card_a = PokerCerberina::Card.new("J", "♦︎")
+      card_b = PokerCerberina::Card.new("J", "♣︎")
+      expect(card_a <=> card_b).to eq 0
     end
-    it "shouldn't be equal for cards with different rank but same suit" do
-      card_a = PokerCerberina::Card.new("Q", "♦︎")
-      card_b = PokerCerberina::Card.new("J", "♦︎")
-      expect(card_a == card_b).to eq false
-    end
-
     context "compare cards with different ranks" do
-      it "should returns false" do
+      it "returns false" do
         card_a = PokerCerberina::Card.new("A", "♣︎")
         card_b = PokerCerberina::Card.new("2", "♠︎")
         expect(card_b > card_a).to eq false
       end
-      it "should return true" do
+      it "return true" do
         card_a = PokerCerberina::Card.new("A", "♣︎")
         card_b = PokerCerberina::Card.new("2", "♠︎")
         expect(card_b < card_a).to eq true
+      end
+    end
+  end
+
+  describe "#==" do
+    context "when 2 cards with same rank compared" do
+      it "isn't equal for cards with different suit" do
+        card_a = PokerCerberina::Card.new("Q", "♦︎")
+        card_b = PokerCerberina::Card.new("Q", "♥︎")
+        expect(card_a == card_b).to eq false
+      end
+      it "is equal for cards with same suit" do
+        card_a = PokerCerberina::Card.new("Q", "♥︎")
+        card_b = PokerCerberina::Card.new("Q", "♥︎")
+        require "debug"
+        debugger
+        expect(card_a == card_b).to eq true
       end
     end
   end
