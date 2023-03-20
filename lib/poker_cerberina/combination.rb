@@ -8,7 +8,11 @@ class PokerCerberina::Combination
   end
 
   def ==(other)
-    self.cards - other.cards == []
+    if self.type == "kiker"
+      self.cards == other.cards
+    else
+      self.cards - other.cards == []
+    end
   end
 
   def <=>(other)

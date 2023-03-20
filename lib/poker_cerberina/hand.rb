@@ -15,13 +15,25 @@ class PokerCerberina::Hand
     end
   end
 
-  def group
+  def group_rank
     groups = {}
     cards.each do |c|
       if groups[c.rank]
         groups[c.rank] << c
       else
         groups[c.rank] = [c]
+      end
+    end
+    groups
+  end
+
+  def group_suit
+    groups = {}
+    cards.each do |c|
+      if groups[c.suit]
+        groups[c.suit] << c
+      else
+        groups[c.suit] = [c]
       end
     end
     groups

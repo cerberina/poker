@@ -2,6 +2,32 @@ require "rspec"
 require "poker_cerberina"
 
 describe PokerCerberina::CombinationSearch do
+  describe "find_kiker" do
+    it "finds the kiker in combinations with different ranks" do
+      search = PokerCerberina::CombinationSearch.new
+      hand = PokerCerberina::Hand.new([
+        PokerCerberina::Card.new("A", "♠︎"),
+        PokerCerberina::Card.new("2", "♠︎"),
+        PokerCerberina::Card.new("K", "♣︎"),
+        PokerCerberina::Card.new("K", "♥︎"),
+        PokerCerberina::Card.new("2", "♣︎"),
+      ])
+      expect(search.find_kiker(hand)).to eq([PokerCerberina::Combination.new("kiker",
+                                                                             PokerCerberina::Card.new("A", "♠︎"))])
+    end
+    it "finds the kiker in combination where several cards has same rank" do
+      search = PokerCerberina::CombinationSearch.new
+      hand = PokerCerberina::Hand.new([
+        PokerCerberina::Card.new("K", "♠︎"),
+        PokerCerberina::Card.new("2", "♠︎"),
+        PokerCerberina::Card.new("K", "♣︎"),
+        PokerCerberina::Card.new("K", "♥︎"),
+        PokerCerberina::Card.new("2", "♣︎"),
+      ])
+      expect(search.find_kiker(hand)).to eq([PokerCerberina::Combination.new("kiker",
+                                                                             PokerCerberina::Card.new("K", "♠︎"))])
+    end
+  end
   describe "find_pairs" do
     it "finds the pair" do
       search = PokerCerberina::CombinationSearch.new
@@ -104,8 +130,8 @@ describe PokerCerberina::CombinationSearch do
       expect(search.find_quads(hand)).to eq([])
     end
   end
-  describe "find_fullhouse" do
-    it "finds the fullhouse" do
+  describe "find_full_house" do
+    it "finds the full_house" do
       search = PokerCerberina::CombinationSearch.new
       hand = PokerCerberina::Hand.new([
         PokerCerberina::Card.new("K", "♠︎"),
@@ -114,14 +140,14 @@ describe PokerCerberina::CombinationSearch do
         PokerCerberina::Card.new("K", "♥︎"),
         PokerCerberina::Card.new("2", "♣︎"),
       ])
-      expect(search.find_fullhouse(hand)).to eq([PokerCerberina::Combination.new("fullhouse",
-                                                                                 [PokerCerberina::Card.new("K", "♠︎"),
-                                                                                  PokerCerberina::Card.new("2", "♠︎"),
-                                                                                  PokerCerberina::Card.new("K", "♣︎"),
-                                                                                  PokerCerberina::Card.new("K", "♥︎"),
-                                                                                  PokerCerberina::Card.new("2", "♣︎")])])
+      expect(search.find_full_house(hand)).to eq([PokerCerberina::Combination.new("full_house",
+                                                                                  [PokerCerberina::Card.new("K", "♠︎"),
+                                                                                   PokerCerberina::Card.new("2", "♠︎"),
+                                                                                   PokerCerberina::Card.new("K", "♣︎"),
+                                                                                   PokerCerberina::Card.new("K", "♥︎"),
+                                                                                   PokerCerberina::Card.new("2", "♣︎")])])
     end
-    it "doesn't find the fullhouse" do
+    it "doesn't find the full_house" do
       search = PokerCerberina::CombinationSearch.new
       hand = PokerCerberina::Hand.new([
         PokerCerberina::Card.new("K", "♠︎"),
@@ -130,11 +156,11 @@ describe PokerCerberina::CombinationSearch do
         PokerCerberina::Card.new("K", "♥︎"),
         PokerCerberina::Card.new("2", "♣︎"),
       ])
-      expect(search.find_fullhouse(hand)).to eq([])
+      expect(search.find_full_house(hand)).to eq([])
     end
   end
-  describe "find_flash" do
-    it "finds the flash" do
+  describe "find_flush" do
+    it "finds the flush" do
       search = PokerCerberina::CombinationSearch.new
       hand = PokerCerberina::Hand.new([
         PokerCerberina::Card.new("K", "♠︎"),
@@ -145,12 +171,58 @@ describe PokerCerberina::CombinationSearch do
       ])
       #require "debug"
       #debugger
-      expect(search.find_flash(hand)).to eq([PokerCerberina::Combination.new("flash",
+      expect(search.find_flush(hand)).to eq([PokerCerberina::Combination.new("flush",
                                                                              [PokerCerberina::Card.new("K", "♠︎"),
                                                                               PokerCerberina::Card.new("3", "♠︎"),
                                                                               PokerCerberina::Card.new("2", "♠︎"),
                                                                               PokerCerberina::Card.new("A", "♠︎"),
                                                                               PokerCerberina::Card.new("Q", "♠︎")])])
+    end
+    it "doesn't find the flush" do
+      search = PokerCerberina::CombinationSearch.new
+      hand = PokerCerberina::Hand.new([
+        PokerCerberina::Card.new("K", "♠︎"),
+        PokerCerberina::Card.new("2", "♠︎"),
+        PokerCerberina::Card.new("3", "♠︎"),
+        PokerCerberina::Card.new("Q", "♠︎"),
+        PokerCerberina::Card.new("A", "♥︎"),
+      ])
+      #require "debug"
+      #debugger
+      expect(search.find_flush(hand)).to eq([])
+    end
+  end
+  describe "find_straight" do
+    it "finds the straight" do
+      search = PokerCerberina::CombinationSearch.new
+      hand = PokerCerberina::Hand.new([
+        PokerCerberina::Card.new("K", "♠︎"),
+        PokerCerberina::Card.new("2", "♠︎"),
+        PokerCerberina::Card.new("3", "♠︎"),
+        PokerCerberina::Card.new("Q", "♠︎"),
+        PokerCerberina::Card.new("A", "♠︎"),
+      ])
+      #require "debug"
+      #debugger
+      expect(search.find_straight(hand)).to eq([PokerCerberina::Combination.new("straight",
+                                                                                [PokerCerberina::Card.new("K", "♠︎"),
+                                                                                 PokerCerberina::Card.new("3", "♠︎"),
+                                                                                 PokerCerberina::Card.new("2", "♠︎"),
+                                                                                 PokerCerberina::Card.new("A", "♠︎"),
+                                                                                 PokerCerberina::Card.new("Q", "♠︎")])])
+    end
+    it "doesn't find the straight" do
+      search = PokerCerberina::CombinationSearch.new
+      hand = PokerCerberina::Hand.new([
+        PokerCerberina::Card.new("K", "♠︎"),
+        PokerCerberina::Card.new("2", "♠︎"),
+        PokerCerberina::Card.new("3", "♠︎"),
+        PokerCerberina::Card.new("Q", "♠︎"),
+        PokerCerberina::Card.new("A", "♥︎"),
+      ])
+      #require "debug"
+      #debugger
+      expect(search.find_straight(hand)).to eq([])
     end
   end
 end

@@ -1,7 +1,12 @@
 class PokerCerberina::CombinationSearch
+  def find_kiker(hand)
+    result = []
+    result << PokerCerberina::Combination.new("kiker", hand.max)
+  end
+
   def find_pairs(hand)
     result = []
-    hand.group.each_value do |value|
+    hand.group_rank.each_value do |value|
       if value.size == 2
         result << PokerCerberina::Combination.new("pair", value)
       end
@@ -11,7 +16,7 @@ class PokerCerberina::CombinationSearch
 
   def find_sets(hand)
     result = []
-    hand.group.each_value do |value|
+    hand.group_rank.each_value do |value|
       if value.size == 3
         result << PokerCerberina::Combination.new("set", value)
       end
@@ -21,7 +26,7 @@ class PokerCerberina::CombinationSearch
 
   def find_quads(hand)
     result = []
-    hand.group.each_value do |value|
+    hand.group_rank.each_value do |value|
       if value.size == 4
         result << PokerCerberina::Combination.new("quad", value)
       end
@@ -29,11 +34,11 @@ class PokerCerberina::CombinationSearch
     result
   end
 
-  def find_fullhouse(hand)
+  def find_full_house(hand)
     pair = []
     set = []
     result = []
-    hand.group.each_value do |value|
+    hand.group_rank.each_value do |value|
       if value.size == 2
         pair << value
       elsif value.size == 3
@@ -41,20 +46,30 @@ class PokerCerberina::CombinationSearch
       end
     end
     if !pair.empty? && !set.empty?
-      result << PokerCerberina::Combination.new("fullhouse", (pair + set).flatten)
+      result << PokerCerberina::Combination.new("full_house", (pair + set).flatten)
     end
     result
   end
 
-  def find_flash(hand)
+  def find_flush(hand)
     result = []
-    #require "debug"
-    #debugger
-    hand.each do |card|
-      if !card.suit == hand.first.suit
-        return []
+    hand.group_suit.each_value do |value|
+      if value.size == 5
+        result << PokerCerberina::Combination.new("flush", value)
       end
     end
-    result << PokerCerberina::Combination.new("flash", hand.cards)
+    result
+  end
+
+  def find_straight(cards)
+    result = []
+    result = cards.sort
+    straight_down(result.last)
+    for i in result.length - 1..1
+      if straight_down(result[i])
+        result[i - 5..i].each { |el| result << PokerCerberina::Combination.new("straight", el) }
+      end
+    end
+    result.flatten!
   end
 end
