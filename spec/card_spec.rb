@@ -47,10 +47,36 @@ describe PokerCerberina::Card do
       it "is equal for cards with same suit" do
         card_a = PokerCerberina::Card.new("Q", "♥︎")
         card_b = PokerCerberina::Card.new("Q", "♥︎")
-        require "debug"
-        debugger
         expect(card_a == card_b).to eq true
       end
+    end
+  end
+
+  describe "#straight_down" do
+    it "doesn't exist for cards less than 6" do
+      card_a = PokerCerberina::Card.new("5", "♦︎")
+      expect(card_a.straight_down).to eq []
+    end
+    it "exists for card = 6" do
+      card_a = PokerCerberina::Card.new("6", "♥︎")
+      expect(card_a.straight_down).to eq ["2", "3", "4", "5", "6"]
+    end
+    it "exists for other card" do
+      card_a = PokerCerberina::Card.new("J", "♥︎")
+      expect(card_a.straight_down).to eq ["7", "8", "9", "10", "J"]
+    end
+  end
+
+  describe "#eql?" do
+    it "isn't equal for cards with different suit" do
+      card_a = PokerCerberina::Card.new("Q", "♦︎")
+      card_b = PokerCerberina::Card.new("Q", "♥︎")
+      expect(card_a == card_b).to eq false
+    end
+    it "is equal for cards with same suit" do
+      card_a = PokerCerberina::Card.new("Q", "♥︎")
+      card_b = PokerCerberina::Card.new("Q", "♥︎")
+      expect(card_a == card_b).to eq true
     end
   end
 end

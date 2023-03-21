@@ -2,30 +2,44 @@ require "rspec"
 require "poker_cerberina"
 
 describe PokerCerberina::CombinationSearch do
-  describe "find_kiker" do
-    it "finds the kiker in combinations with different ranks" do
-      search = PokerCerberina::CombinationSearch.new
-      hand = PokerCerberina::Hand.new([
-        PokerCerberina::Card.new("A", "♠︎"),
-        PokerCerberina::Card.new("2", "♠︎"),
-        PokerCerberina::Card.new("K", "♣︎"),
-        PokerCerberina::Card.new("K", "♥︎"),
-        PokerCerberina::Card.new("2", "♣︎"),
-      ])
-      expect(search.find_kiker(hand)).to eq([PokerCerberina::Combination.new("kiker",
-                                                                             PokerCerberina::Card.new("A", "♠︎"))])
+  let(:search) { described_class.new(hand) }
+
+  describe "#find_kiker" do
+    subject(:find_kiker) { search.find_kiker }
+    context "when all cards are different ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("A", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("kiker", PokerCerberina::Card.new("A", "♠︎"))
+      end
+
+      it "finds the kiker" do
+        expect(find_kiker).to eq([expected_combination])
+      end
     end
-    it "finds the kiker in combination where several cards has same rank" do
-      search = PokerCerberina::CombinationSearch.new
-      hand = PokerCerberina::Hand.new([
-        PokerCerberina::Card.new("K", "♠︎"),
-        PokerCerberina::Card.new("2", "♠︎"),
-        PokerCerberina::Card.new("K", "♣︎"),
-        PokerCerberina::Card.new("K", "♥︎"),
-        PokerCerberina::Card.new("2", "♣︎"),
-      ])
-      expect(search.find_kiker(hand)).to eq([PokerCerberina::Combination.new("kiker",
-                                                                             PokerCerberina::Card.new("K", "♠︎"))])
+    context "whenseveral cards have same rank" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("kiker", PokerCerberina::Card.new("K", "♠︎"))
+      end
+      it "finds the kiker in combination where " do
+        expect(find_kiker).to eq([expected_combination])
+      end
     end
   end
   describe "find_pairs" do
@@ -197,18 +211,18 @@ describe PokerCerberina::CombinationSearch do
       search = PokerCerberina::CombinationSearch.new
       hand = PokerCerberina::Hand.new([
         PokerCerberina::Card.new("K", "♠︎"),
-        PokerCerberina::Card.new("2", "♠︎"),
-        PokerCerberina::Card.new("3", "♠︎"),
+        PokerCerberina::Card.new("J", "♦︎"),
+        PokerCerberina::Card.new("10", "♣︎"),
         PokerCerberina::Card.new("Q", "♠︎"),
-        PokerCerberina::Card.new("A", "♠︎"),
+        PokerCerberina::Card.new("A", "♥︎"),
       ])
       #require "debug"
       #debugger
       expect(search.find_straight(hand)).to eq([PokerCerberina::Combination.new("straight",
                                                                                 [PokerCerberina::Card.new("K", "♠︎"),
-                                                                                 PokerCerberina::Card.new("3", "♠︎"),
-                                                                                 PokerCerberina::Card.new("2", "♠︎"),
-                                                                                 PokerCerberina::Card.new("A", "♠︎"),
+                                                                                 PokerCerberina::Card.new("J", "♦︎"),
+                                                                                 PokerCerberina::Card.new("10", "♣︎"),
+                                                                                 PokerCerberina::Card.new("A", "♥︎"),
                                                                                  PokerCerberina::Card.new("Q", "♠︎")])])
     end
     it "doesn't find the straight" do

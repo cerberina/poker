@@ -28,13 +28,16 @@ class PokerCerberina::Card
     return false
   end
 
-  def previous_rank
-    PokerCerberina::RANK[PokerCerberina::RANK.index(rank) - 1]
-  end
+  # def previous_rank
+  #   PokerCerberina::RANK[PokerCerberina::RANK.index(rank) - 1]
+  # end
 
-  def straight_down(card)
+  def straight_down
     # if rank of card less than 6 - there no straight
-    if card.rank <= ""
-    card.rank - 5..card.rank
+    if PokerCerberina::RANK.index(rank) <= 3
+      return []
+    else
+      PokerCerberina::RANK[PokerCerberina::RANK.index(rank) - 4..PokerCerberina::RANK.index(rank)]
+    end
   end
 end
