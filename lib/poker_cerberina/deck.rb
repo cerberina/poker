@@ -8,14 +8,6 @@ class PokerCerberina::Deck
     end
   end
 
-  def size
-    @deck.size
-  end
-
-  def print_deck
-    @deck.each { |d| puts d.print_card }
-  end
-
   def shuffle
     @deck.shuffle!
     self

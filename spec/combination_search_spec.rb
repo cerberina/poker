@@ -292,4 +292,82 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
+  describe "find_straight_flush" do
+    subject (:find_straight_flush) { search.find_straight_flush }
+    context "when hand contains sequense of 5 cards by ranks and all these cards have same suit" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♦︎"),
+          PokerCerberina::Card.new("J", "♦︎"),
+          PokerCerberina::Card.new("10", "♦︎"),
+          PokerCerberina::Card.new("Q", "♦︎"),
+          PokerCerberina::Card.new("A", "♦︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("straight_flush",
+                                         [PokerCerberina::Card.new("K", "♦︎"),
+                                          PokerCerberina::Card.new("J", "♦︎"),
+                                          PokerCerberina::Card.new("10", "♦︎"),
+                                          PokerCerberina::Card.new("A", "♦︎"),
+                                          PokerCerberina::Card.new("Q", "♦︎")])]
+      end
+      it "finds the straight flush" do
+        expect(find_straight_flush).to eq(expected_combination)
+      end
+    end
+    context "when hand contains sequense of 5 cards by ranks but not and all these cards have same suit" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♦︎"),
+          PokerCerberina::Card.new("J", "♦︎"),
+          PokerCerberina::Card.new("10", "♥︎"),
+          PokerCerberina::Card.new("Q", "♦︎"),
+          PokerCerberina::Card.new("A", "♦︎"),
+        ])
+      end
+      it "doesn't find the straight flush" do
+        expect(find_straight_flush).to eq([])
+      end
+    end
+  end
+  describe "find_royal_flush" do
+    subject (:find_royal_flush) { search.find_royal_flush }
+    context "when hand contains sequense of 5 cards by ranks(the highest is A) and all these cards have same suit" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♦︎"),
+          PokerCerberina::Card.new("J", "♦︎"),
+          PokerCerberina::Card.new("10", "♦︎"),
+          PokerCerberina::Card.new("Q", "♦︎"),
+          PokerCerberina::Card.new("A", "♦︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("royal_flush",
+                                         [PokerCerberina::Card.new("K", "♦︎"),
+                                          PokerCerberina::Card.new("J", "♦︎"),
+                                          PokerCerberina::Card.new("10", "♦︎"),
+                                          PokerCerberina::Card.new("A", "♦︎"),
+                                          PokerCerberina::Card.new("Q", "♦︎")])]
+      end
+      it "finds the royal_flush" do
+        expect(find_royal_flush).to eq(expected_combination)
+      end
+    end
+    context "when hand contains sequense of 5 cards by ranks but not and all these cards have same suit" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♦︎"),
+          PokerCerberina::Card.new("J", "♦︎"),
+          PokerCerberina::Card.new("10", "♥︎"),
+          PokerCerberina::Card.new("Q", "♦︎"),
+          PokerCerberina::Card.new("A", "♦︎"),
+        ])
+      end
+      it "doesn't find the royal_flush" do
+        expect(find_royal_flush).to eq([])
+      end
+    end
+  end
 end

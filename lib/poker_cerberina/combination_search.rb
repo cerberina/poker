@@ -86,6 +86,60 @@ class PokerCerberina::CombinationSearch
     result
   end
 
+  def find_straight_flush
+    result = []
+    hand.each do |card|
+      buffer = []
+      teor_ranks = card.straight_down
+      teor_ranks.each do |rank|
+        if found_card = find_by_rank(rank)
+          buffer << found_card
+        else
+          break
+        end
+      end
+      unless buffer.empty?
+        f_card_suit = buffer.first.suit
+        buffer.each do |card|
+          unless card.suit == f_card_suit
+            buffer = []
+          end
+        end
+        result << PokerCerberina::Combination.new("straight_flush", buffer) unless buffer.empty?
+      end
+    end
+    result
+  end
+
+  def find_royal_flush
+    result = []
+    hand.each do |card|
+      buffer = []
+      teor_ranks = card.straight_down
+      teor_ranks.each do |rank|
+        if found_card = find_by_rank(rank)
+          buffer << found_card
+        else
+          break
+        end
+      end
+      unless buffer.empty?
+        f_card_suit = buffer.first.suit
+        buffer.each do |card|
+          unless card.suit == f_card_suit
+            buffer = []
+          end
+        end
+        unless buffer.empty?
+          if buffer.sort.last.rank == "A"
+            result << PokerCerberina::Combination.new("royal_flush", buffer)
+          end
+        end
+      end
+    end
+    result
+  end
+
   private
 
   def group_rank
