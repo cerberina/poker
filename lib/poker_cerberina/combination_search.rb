@@ -12,7 +12,7 @@ class PokerCerberina::CombinationSearch
 
   def find_pairs
     result = []
-    hand.group_rank.each_value do |value|
+    group_rank.each_value do |value|
       if value.size == 2
         result << PokerCerberina::Combination.new("pair", value)
       end
@@ -22,7 +22,7 @@ class PokerCerberina::CombinationSearch
 
   def find_sets
     result = []
-    hand.group_rank.each_value do |value|
+    group_rank.each_value do |value|
       if value.size == 3
         result << PokerCerberina::Combination.new("set", value)
       end
@@ -32,7 +32,7 @@ class PokerCerberina::CombinationSearch
 
   def find_quads
     result = []
-    hand.group_rank.each_value do |value|
+    group_rank.each_value do |value|
       if value.size == 4
         result << PokerCerberina::Combination.new("quad", value)
       end
@@ -44,7 +44,7 @@ class PokerCerberina::CombinationSearch
     pair = []
     set = []
     result = []
-    hand.group_rank.each_value do |value|
+    group_rank.each_value do |value|
       if value.size == 2
         pair << value
       elsif value.size == 3
@@ -59,7 +59,7 @@ class PokerCerberina::CombinationSearch
 
   def find_flush
     result = []
-    hand.group_suit.each_value do |value|
+    group_suit.each_value do |value|
       if value.size == 5
         result << PokerCerberina::Combination.new("flush", value)
       end
@@ -73,7 +73,7 @@ class PokerCerberina::CombinationSearch
       buffer = []
       teor_ranks = card.straight_down
       teor_ranks.each do |rank|
-        if found_card = hand.find_by_rank(rank)
+        if found_card = find_by_rank(rank)
           buffer << found_card
         else
           break
