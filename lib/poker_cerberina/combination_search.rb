@@ -20,6 +20,19 @@ class PokerCerberina::CombinationSearch
     result
   end
 
+  def find_two_pairs
+    result = []
+    array_of_pairs = []
+    group_rank.each_value do |value|
+      if value.size == 2
+        array_of_pairs << value
+        #result << PokerCerberina::Combination.new("two_pairs", value)
+      end
+    end
+    two_pairs = array_of_pairs.sort_by(&:first).last(2).flatten!
+    result << PokerCerberina::Combination.new("two_pairs", two_pairs)
+  end
+
   def find_sets
     result = []
     group_rank.each_value do |value|
@@ -27,7 +40,7 @@ class PokerCerberina::CombinationSearch
         result << PokerCerberina::Combination.new("set", value)
       end
     end
-    result
+    result.max
   end
 
   def find_quads
