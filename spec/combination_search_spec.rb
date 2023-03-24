@@ -63,6 +63,45 @@ describe PokerCerberina::CombinationSearch do
         expect(find_pairs).to eq([expected_combination])
       end
     end
+    context "when hand contains 2 pair of cards with the same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("J", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("pair",
+                                        [PokerCerberina::Card.new("K", "♠︎"),
+                                         PokerCerberina::Card.new("K", "♥︎")])
+      end
+      it "finds the highest pair" do
+        expect(find_pairs).to eq([expected_combination])
+      end
+    end
+    context "when hand contains 3 pair of cards with the same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("J", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+          PokerCerberina::Card.new("J", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("pair",
+                                        [PokerCerberina::Card.new("K", "♠︎"),
+                                         PokerCerberina::Card.new("K", "♣︎")])
+      end
+      it "finds the highest pair" do
+        expect(find_pairs).to eq([expected_combination])
+      end
+    end
     context "when all cards are different ranks" do
       let(:hand) do
         PokerCerberina::Hand.new([
@@ -77,26 +116,78 @@ describe PokerCerberina::CombinationSearch do
         expect(find_pairs).to eq([])
       end
     end
-    context "when hand contains two pairs of cards with the same rank" do
+  end
+  describe "find_two_pairs" do
+    subject(:find_two_pairs) { search.find_two_pairs }
+    context "when hand contains pair of cards with the same ranks" do
       let(:hand) do
         PokerCerberina::Hand.new([
           PokerCerberina::Card.new("K", "♠︎"),
           PokerCerberina::Card.new("2", "♠︎"),
-          PokerCerberina::Card.new("Q", "♣︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+        ])
+      end
+      it "doesn't find the 2 pair" do
+        expect(find_two_pairs).to eq([])
+      end
+    end
+    context "when hand contains 2 pair of cards with the same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("J", "♣︎"),
           PokerCerberina::Card.new("K", "♥︎"),
           PokerCerberina::Card.new("2", "♣︎"),
         ])
       end
       let(:expected_combination) do
-        [PokerCerberina::Combination.new("pair",
-                                         [PokerCerberina::Card.new("K", "♠︎"),
-                                          PokerCerberina::Card.new("K", "♥︎")]),
-         PokerCerberina::Combination.new("pair",
-                                         [PokerCerberina::Card.new("2", "♠︎"),
-                                          PokerCerberina::Card.new("2", "♣︎")])]
+        PokerCerberina::Combination.new("two_pairs",
+                                        [PokerCerberina::Card.new("K", "♠︎"),
+                                         PokerCerberina::Card.new("K", "♥︎"),
+                                         PokerCerberina::Card.new("2", "♣︎"),
+                                         PokerCerberina::Card.new("2", "♠︎")])
       end
-      it "finds 2 pairs" do
-        expect(find_pairs).to eq(expected_combination)
+      it "finds the 2 pair" do
+        expect(find_two_pairs).to eq([expected_combination])
+      end
+    end
+    context "when hand contains 3 pair of cards with the same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("J", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+          PokerCerberina::Card.new("J", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("two_pairs",
+                                        [PokerCerberina::Card.new("K", "♠︎"),
+                                         PokerCerberina::Card.new("K", "♣︎"),
+                                         PokerCerberina::Card.new("J", "♥︎"),
+                                         PokerCerberina::Card.new("J", "♣︎")])
+      end
+      it "finds the highest 2 pair" do
+        expect(find_two_pairs).to eq([expected_combination])
+      end
+    end
+    context "when all cards are different ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("3", "♠︎"),
+          PokerCerberina::Card.new("4", "♣︎"),
+          PokerCerberina::Card.new("9", "♥︎"),
+          PokerCerberina::Card.new("10", "♠︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+        ])
+      end
+      it "doesn't find the 2 pair" do
+        expect(find_two_pairs).to eq([])
       end
     end
   end
@@ -119,6 +210,27 @@ describe PokerCerberina::CombinationSearch do
                                          PokerCerberina::Card.new("K", "♥︎")])
       end
       it "finds the set" do
+        expect(find_sets).to eq([expected_combination])
+      end
+    end
+    context "hand contains two sets of 3 cards with the same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+          PokerCerberina::Card.new("2", "♥︎"),
+        ])
+      end
+      let(:expected_combination) do
+        PokerCerberina::Combination.new("set",
+                                        [PokerCerberina::Card.new("K", "♠︎"),
+                                         PokerCerberina::Card.new("K", "♣︎"),
+                                         PokerCerberina::Card.new("K", "♥︎")])
+      end
+      it "finds the highest set" do
         expect(find_sets).to eq([expected_combination])
       end
     end
@@ -199,6 +311,53 @@ describe PokerCerberina::CombinationSearch do
         expect(find_full_house).to eq(expected_combination)
       end
     end
+    context "when hand contain 2 pairs of cards with same ranks and set of 3 cards with same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("2", "♣︎"),
+          PokerCerberina::Card.new("10", "♠︎"),
+          PokerCerberina::Card.new("10", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("full_house",
+                                         [PokerCerberina::Card.new("K", "♠︎"),
+                                          PokerCerberina::Card.new("10", "♠︎"),
+                                          PokerCerberina::Card.new("K", "♣︎"),
+                                          PokerCerberina::Card.new("K", "♥︎"),
+                                          PokerCerberina::Card.new("10", "♣︎")])]
+      end
+      it "finds the full_house" do
+        expect(find_full_house).to eq(expected_combination)
+      end
+    end
+    context "when hand contain two sets of 3 cards with same ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("K", "♥︎"),
+          PokerCerberina::Card.new("10", "♥︎"),
+          PokerCerberina::Card.new("10", "♠︎"),
+          PokerCerberina::Card.new("10", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("full_house",
+                                         [PokerCerberina::Card.new("K", "♠︎"),
+                                          PokerCerberina::Card.new("10", "♠︎"),
+                                          PokerCerberina::Card.new("K", "♣︎"),
+                                          PokerCerberina::Card.new("K", "♥︎"),
+                                          PokerCerberina::Card.new("10", "♥︎")])]
+      end
+      it "finds the full_house" do
+        expect(find_full_house).to eq(expected_combination)
+      end
+    end
     context "when hand doesn't contain 1 pair of cards with same ranks and set of 3 cards with same ranks" do
       let (:hand) do
         PokerCerberina::Hand.new([
@@ -235,6 +394,30 @@ describe PokerCerberina::CombinationSearch do
                                           PokerCerberina::Card.new("Q", "♠︎")])]
       end
       it "finds the flush" do
+        expect(find_flush).to eq(expected_combination)
+      end
+    end
+    context "when all cards in hand have the same suit" do
+      let (:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("2", "♠︎"),
+          PokerCerberina::Card.new("7", "♠︎"),
+          PokerCerberina::Card.new("Q", "♠︎"),
+          PokerCerberina::Card.new("J", "♠︎"),
+          PokerCerberina::Card.new("7", "♠︎"),
+          PokerCerberina::Card.new("3", "♠︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("flush",
+                                         [PokerCerberina::Card.new("K", "♠︎"),
+                                          PokerCerberina::Card.new("J", "♠︎"),
+                                          PokerCerberina::Card.new("7", "♠︎"),
+                                          PokerCerberina::Card.new("9", "♠︎"),
+                                          PokerCerberina::Card.new("Q", "♠︎")])]
+      end
+      it "finds the highest flush" do
         expect(find_flush).to eq(expected_combination)
       end
     end
@@ -277,6 +460,30 @@ describe PokerCerberina::CombinationSearch do
         expect(find_straight).to eq(expected_combination)
       end
     end
+    context "when hand contains 3 sequense of 5 cards by ranks" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♠︎"),
+          PokerCerberina::Card.new("J", "♦︎"),
+          PokerCerberina::Card.new("10", "♣︎"),
+          PokerCerberina::Card.new("Q", "♠︎"),
+          PokerCerberina::Card.new("9", "♥︎"),
+          PokerCerberina::Card.new("8", "♦︎"),
+          PokerCerberina::Card.new("7", "♥︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("straight",
+                                         [PokerCerberina::Card.new("K", "♠︎"),
+                                          PokerCerberina::Card.new("J", "♦︎"),
+                                          PokerCerberina::Card.new("10", "♣︎"),
+                                          PokerCerberina::Card.new("9", "♥︎"),
+                                          PokerCerberina::Card.new("Q", "♠︎")])]
+      end
+      it "finds the highest straight" do
+        expect(find_straight).to eq(expected_combination)
+      end
+    end
     context "when hand doesn't contain sequense of 5 cards by ranks" do
       let(:hand) do
         PokerCerberina::Hand.new([
@@ -313,6 +520,30 @@ describe PokerCerberina::CombinationSearch do
                                           PokerCerberina::Card.new("Q", "♦︎")])]
       end
       it "finds the straight flush" do
+        expect(find_straight_flush).to eq(expected_combination)
+      end
+    end
+    context "when hand contains 3 sequense of 5 cards by ranks with the same suit" do
+      let(:hand) do
+        PokerCerberina::Hand.new([
+          PokerCerberina::Card.new("K", "♣︎"),
+          PokerCerberina::Card.new("J", "♣︎"),
+          PokerCerberina::Card.new("10", "♣︎"),
+          PokerCerberina::Card.new("Q", "♣︎"),
+          PokerCerberina::Card.new("9", "♣︎"),
+          PokerCerberina::Card.new("8", "♣︎"),
+          PokerCerberina::Card.new("7", "♣︎"),
+        ])
+      end
+      let(:expected_combination) do
+        [PokerCerberina::Combination.new("straight",
+                                         [PokerCerberina::Card.new("K", "♣︎"),
+                                          PokerCerberina::Card.new("J", "♣︎"),
+                                          PokerCerberina::Card.new("10", "♣︎"),
+                                          PokerCerberina::Card.new("9", "♣︎"),
+                                          PokerCerberina::Card.new("Q", "♣︎")])]
+      end
+      it "finds the highest straight" do
         expect(find_straight_flush).to eq(expected_combination)
       end
     end
