@@ -42,7 +42,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_pairs" do
+  describe "#find_pairs" do
     subject(:find_pairs) { search.find_pairs }
     context "when hand contains pair of cards with the same ranks" do
       let(:hand) do
@@ -117,7 +117,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_two_pairs" do
+  describe "#find_two_pairs" do
     subject(:find_two_pairs) { search.find_two_pairs }
     context "when hand contains pair of cards with the same ranks" do
       let(:hand) do
@@ -191,7 +191,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_sets" do
+  describe "#find_sets" do
     subject (:find_sets) { search.find_sets }
     context "hand contains 3 cards with the same ranks" do
       let(:hand) do
@@ -249,7 +249,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_quads" do
+  describe "#find_quads" do
     subject (:find_quads) { search.find_quads }
     context "hand contain 4 cards with the same rank" do
       let(:hand) do
@@ -287,7 +287,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_full_house" do
+  describe "#find_full_house" do
     subject (:find_full_house) { search.find_full_house }
     context "when hand contain 1 pair of cards with same ranks and set of 3 cards with same ranks" do
       let(:hand) do
@@ -373,7 +373,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_flush" do
+  describe "#find_flush" do
     subject (:find_flush) { search.find_flush }
     context "when all cards in hand have the same suit" do
       let (:hand) do
@@ -436,7 +436,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_straight" do
+  describe "#find_straight" do
     subject (:find_straight) { search.find_straight }
     context "when hand contains sequense of 5 cards by ranks" do
       let(:hand) do
@@ -499,7 +499,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_straight_flush" do
+  describe "#find_straight_flush" do
     subject (:find_straight_flush) { search.find_straight_flush }
     context "when hand contains sequense of 5 cards by ranks and all these cards have same suit" do
       let(:hand) do
@@ -536,7 +536,7 @@ describe PokerCerberina::CombinationSearch do
         ])
       end
       let(:expected_combination) do
-        [PokerCerberina::Combination.new("straight",
+        [PokerCerberina::Combination.new("straight_flush",
                                          [PokerCerberina::Card.new("K", "♣︎"),
                                           PokerCerberina::Card.new("J", "♣︎"),
                                           PokerCerberina::Card.new("10", "♣︎"),
@@ -562,7 +562,7 @@ describe PokerCerberina::CombinationSearch do
       end
     end
   end
-  describe "find_royal_flush" do
+  describe "#find_royal_flush" do
     subject (:find_royal_flush) { search.find_royal_flush }
     context "when hand contains sequense of 5 cards by ranks(the highest is A) and all these cards have same suit" do
       let(:hand) do
