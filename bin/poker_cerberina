@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require "poker_cerberina"
+puts "How many players?"
+number_of_players = gets.chomp.to_i
+
+game = PokerCerberina::Game.new(number_of_players)
+game.deal
+game.players.each do |player|
+  puts "#{player.name}: #{player.best_combination}"
+end
+
+puts "#{game.winning_player.name}: #{game.winning_player.best_combination}"

@@ -11,4 +11,8 @@ class PokerCerberina::Hand
       yield card
     end
   end
+
+  def size
+    cards.size
+  end
 end

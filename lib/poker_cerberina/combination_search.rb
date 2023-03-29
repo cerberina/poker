@@ -7,8 +7,8 @@ class PokerCerberina::CombinationSearch
 
   def find_kiker
     result = []
-    #(hand - cards of combinations).max
-    result << PokerCerberina::Combination.new("kiker", hand.max)
+    #(hand - cards of combinations)
+    result << PokerCerberina::Combination.new("kiker", [hand.max])
   end
 
   def find_pairs

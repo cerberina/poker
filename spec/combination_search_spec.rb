@@ -17,7 +17,7 @@ describe PokerCerberina::CombinationSearch do
         ])
       end
       let(:expected_combination) do
-        PokerCerberina::Combination.new("kiker", PokerCerberina::Card.new("A", "♠︎"))
+        PokerCerberina::Combination.new("kiker", [PokerCerberina::Card.new("A", "♠︎")])
       end
 
       it "finds the kiker" do
@@ -35,7 +35,7 @@ describe PokerCerberina::CombinationSearch do
         ])
       end
       let(:expected_combination) do
-        PokerCerberina::Combination.new("kiker", PokerCerberina::Card.new("K", "♠︎"))
+        PokerCerberina::Combination.new("kiker", [PokerCerberina::Card.new("K", "♠︎")])
       end
       it "finds the kiker in combination where " do
         expect(find_kiker).to eq([expected_combination])
