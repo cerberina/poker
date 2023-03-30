@@ -19,6 +19,11 @@ class PokerCerberina::Combination
       PokerCerberina::HIERARCHY.index(type) <=> PokerCerberina::HIERARCHY.index(other.type)
     end
   end
+
+  def print
+    printed_cards = cards.map { |card| card.print }
+    "type: #{type}, cards: #{printed_cards.join(",")}"
+  end
 end
 
 private
@@ -28,15 +33,8 @@ def compare_equal_types(other)
     cards.first.rank <=> other.cards.first.rank
   elsif ["royal_flush", "straight_flush", "straight"].include? type
     cards.sort.last <=> other.cards.sort.last
-  elsif type == "flush"
-    flush_compare = 0
-    sorted_cards = cards.sort.reverse
-    sorted_other_cards = other.cards.sort.reverse
-    sorted_cards.each.with_index do |card, index|
-      flush_compare = PokerCerberina::RANK.index(card.rank) <=> PokerCerberina::RANK.index(sorted_other_cards[index].rank)
-      return flush_compare if flush_compare != 0
-    end
-    return flush_compare
+  elsif ["flush", "kiker"].include? type
+    compare_two_arrays(cards, other.cards)
   elsif type == "full_house"
     self_set_rank = rank_of_group(cards, 3).first
     other_set_rank = rank_of_group(other.cards, 3).first
@@ -76,4 +74,15 @@ def rank_of_group(cards, size)
     end
   end
   cards_rank
+end
+
+def compare_two_arrays(array1, array2)
+  compare_result = 0
+  sorted_cards = array1.sort.reverse
+  sorted_cards2 = array2.sort.reverse
+  sorted_cards.each.with_index do |card, index|
+    compare_result = PokerCerberina::RANK.index(card.rank) <=> PokerCerberina::RANK.index(sorted_cards2[index].rank)
+    return compare_result if compare_result != 0
+  end
+  return compare_result
 end

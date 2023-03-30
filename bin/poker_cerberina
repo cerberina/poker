@@ -5,9 +5,13 @@ puts "How many players?"
 number_of_players = gets.chomp.to_i
 
 game = PokerCerberina::Game.new(number_of_players)
-game.deal
+game.deck.shuffle
+game.deal(5)
 game.players.each do |player|
-  puts "#{player.name}: #{player.best_combination}"
+  puts "#{player.name}."
+  puts "The best combination is: 
+                                #{player.best_combination.print}"
 end
 
-puts "#{game.winning_player.name}: #{game.winning_player.best_combination}"
+puts "The game winner is #{game.winning_player.name} 
+with combination #{player.best_combination.print}"

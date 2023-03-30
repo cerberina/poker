@@ -79,4 +79,11 @@ describe PokerCerberina::Card do
       expect(card_a == card_b).to eq true
     end
   end
+
+  describe "print" do
+    it "prints 1 card correctly" do
+      card = PokerCerberina::Card.new("J", "♦︎")
+      expect(card.print).to eq "J♦︎"
+    end
+  end
 end

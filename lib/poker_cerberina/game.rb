@@ -17,4 +17,9 @@ class PokerCerberina::Game
       player.hand = PokerCerberina::Hand.new (deck.select_cards(count_of_cards))
     end
   end
+
+  def winning_player
+    best_combinations = players.map { |player| player.best_combination }
+    players[best_combinations.index(best_combinations.max)]
+  end
 end

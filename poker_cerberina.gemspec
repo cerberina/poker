@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
     "https://rubygems.org/gems/poker_cerberina"
   s.license = "MIT"
 
+  s.add_runtime_dependency "faker"
   s.add_development_dependency "debug"
   s.add_development_dependency "rspec"
   s.add_development_dependency "bundler"
