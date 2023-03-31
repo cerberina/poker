@@ -80,10 +80,10 @@ describe PokerCerberina::Card do
     end
   end
 
-  describe "print" do
+  describe "#to_s" do
     it "prints 1 card correctly" do
       card = PokerCerberina::Card.new("J", "♦︎")
-      expect(card.print).to eq "J♦︎"
+      expect(card.to_s).to eq "J♦︎"
     end
   end
 end

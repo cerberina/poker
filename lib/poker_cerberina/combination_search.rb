@@ -5,12 +5,8 @@ class PokerCerberina::CombinationSearch
     @hand = hand
   end
 
-  def find_kiker(combination = nil)
-    if combination
-      PokerCerberina::Combination.new("kiker", hand.cards - combination.cards)
-    else
-      PokerCerberina::Combination.new("kiker", hand.cards)
-    end
+  def find_top_card
+    PokerCerberina::Combination.new("top_card", hand.cards.max)
   end
 
   def find_pairs
@@ -61,34 +57,40 @@ class PokerCerberina::CombinationSearch
   end
 
   def find_straight
-    PokerCerberina::Combination.new("straight", highest_5_card) unless highest_5_card.empty?
+    straights = highest_5_card.map { |cards| PokerCerberina::Combination.new("straight", cards) }
+    straights.max if straights.any?
   end
 
   def find_straight_flush
-    buffer = highest_5_card
-    unless buffer.empty?
-      f_card_suit = buffer.first.suit
-      buffer.each do |card|
-        unless card.suit == f_card_suit
-          buffer = []
+    straights = highest_5_card
+    if straights.any?
+      straights.each do |straight|
+        f_card_suit = straight.first.suit
+        straight.each do |card|
+          unless card.suit == f_card_suit
+            straights.shift
+          end
         end
       end
-      PokerCerberina::Combination.new("straight_flush", buffer) unless buffer.empty?
+      PokerCerberina::Combination.new("straight_flush", straights.max) if straights.any?
     end
   end
 
   def find_royal_flush
-    buffer = highest_5_card
-    unless buffer.empty?
-      f_card_suit = buffer.first.suit
-      buffer.each do |card|
-        unless card.suit == f_card_suit
-          buffer = []
+    straights = highest_5_card
+    if straights.any?
+      straights.each do |straight|
+        f_card_suit = straight.first.suit
+        straight.each do |card|
+          unless card.suit == f_card_suit
+            straights.shift
+          end
         end
       end
-      unless buffer.empty?
-        if buffer.sort.last.rank == "A"
-          PokerCerberina::Combination.new("royal_flush", buffer)
+      if straights.any?
+        max_straight = straights.max
+        if max_straight.sort.last.rank == "A"
+          PokerCerberina::Combination.new("royal_flush", max_straight)
         end
       end
     end
@@ -147,15 +149,8 @@ class PokerCerberina::CombinationSearch
           break
         end
       end
-      unless buffer.empty?
-        unless array_of_cards.empty?
-          array_of_cards.push(buffer - array_of_cards)
-        else
-          array_of_cards.push(buffer)
-        end
-        array_of_cards.flatten!
-      end
+      array_of_cards << buffer if buffer.any?
     end
-    array_of_cards.max(5)
+    array_of_cards
   end
 end

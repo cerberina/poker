@@ -22,7 +22,7 @@ class PokerCerberina::Player
     combinations << search.find_quads
     combinations << search.find_straight_flush
     combinations << search.find_royal_flush
-    return best = combinations.max if combinations.any?
-    search.find_kiker
+    combinations << search.find_top_card
+    combinations.compact.max
   end
 end

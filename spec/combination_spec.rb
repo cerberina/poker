@@ -5,8 +5,8 @@ def card(rank, suit)
   PokerCerberina::Card.new(rank, suit)
 end
 
-def kiker(cards)
-  PokerCerberina::Combination.new("kiker", cards)
+def top_card(cards)
+  PokerCerberina::Combination.new("top_card", cards)
 end
 
 def pair(cards)
@@ -47,22 +47,22 @@ end
 
 describe PokerCerberina::Combination do
   describe "#<=>" do
-    describe "compare kiker with different combinations" do
-      let(:kiker_a) do
-        kiker([card("A", "♠︎"), card("Q", "♣︎")])
+    describe "compare top_card with different combinations" do
+      let(:top_card_a) do
+        top_card(card("A", "♠︎"))
       end
-      context "compare two kikers" do
-        it "is equal for kiker with same ranks" do
-          kiker_b = kiker([card("A", "♣︎"), card("Q", "♥︎")])
-          expect(kiker_a <=> kiker_b).to eq 0
+      context "compare two top_cards" do
+        it "is equal for top_card with same ranks" do
+          top_card_b = top_card(card("A", "♣︎"))
+          expect(top_card_a <=> top_card_b).to eq 0
         end
         it "returns true" do
-          kiker_b = kiker([card("K", "♣︎"), card("Q", "♥︎")])
-          expect(kiker_a > kiker_b).to eq true
+          top_card_b = top_card(card("K", "♣︎"))
+          expect(top_card_a > top_card_b).to eq true
         end
       end
-      context "compare kiker with other type of combination" do
-        it "is true that straight_flush higher than kiker " do
+      context "compare top_cards with other type of combination" do
+        it "is true that straight_flush higher than top_card " do
           straight_flush = straight_flush(
             [card("K", "♣︎"),
              card("J", "♣︎"),
@@ -70,25 +70,25 @@ describe PokerCerberina::Combination do
              card("9", "♣︎"),
              card("Q", "♣︎")]
           )
-          expect(straight_flush > kiker_a).to eq true
+          expect(straight_flush > top_card_a).to eq true
         end
       end
     end
     describe "compare pair with different combinations" do
       let(:pair_a) do
-        pair([card("Q", "♠︎"), card("Q", "♣︎")])
+        pair([card("7", "♠︎"), card("7", "♣︎")])
       end
       context "compare two pairs" do
         it "is equal for pairs with same rank" do
-          pair_b = pair([card("Q", "♦︎"), card("Q", "♥︎")])
+          pair_b = pair([card("7", "♦︎"), card("7", "♥︎")])
           expect(pair_b <=> pair_a).to eq 0
         end
         it "returns false" do
-          pair_b = pair([card("J", "♦︎"), card("J", "♥︎")])
-          expect(pair_a < pair_b).to eq false
+          pair_b = pair([card("10", "♦︎"), card("10", "♥︎")])
+          expect(pair_a < pair_b).to eq true
         end
         it "returns true" do
-          pair_b = pair([card("J", "♦︎"), card("J", "♥︎")])
+          pair_b = pair([card("5", "♦︎"), card("5", "♥︎")])
           expect(pair_a > pair_b).to eq true
         end
       end
@@ -97,10 +97,6 @@ describe PokerCerberina::Combination do
           two_pairs = two_pairs([card("J", "♦︎"), card("J", "♥︎"),
                                  card("3", "♦︎"), card("3", "♥︎")])
           expect(pair_a < two_pairs).to eq true
-        end
-        it "is true that pair is higher than kiker" do
-          kiker = kiker([card("A", "♦︎")])
-          expect(pair_a > kiker).to eq true
         end
       end
     end
@@ -624,7 +620,7 @@ describe PokerCerberina::Combination do
       end
     end
   end
-  describe "#print" do
+  describe "#to_s" do
     it "prints card of combination" do
       combination = royal_flush(
         [card("K", "♦︎"),
@@ -633,7 +629,7 @@ describe PokerCerberina::Combination do
          card("A", "♦︎"),
          card("Q", "♦︎")]
       )
-      expect(combination.print).to eq "type: royal_flush, cards: K♦︎,J♦︎,10♦︎,A♦︎,Q♦︎"
+      expect(combination.to_s).to eq "type: royal_flush, cards: K♦︎,J♦︎,10♦︎,A♦︎,Q♦︎"
     end
     it "prints card of combination" do
       combination = PokerCerberina::Combination.new("kiker", [PokerCerberina::Card.new("A", "♠︎"),
@@ -641,7 +637,7 @@ describe PokerCerberina::Combination do
                                                               PokerCerberina::Card.new("K", "♣︎"),
                                                               PokerCerberina::Card.new("Q", "♥︎"),
                                                               PokerCerberina::Card.new("2", "♣︎")])
-      expect(combination.print).to eq "type: kiker, cards: A♠︎,3♠︎,K♣︎,Q♥︎,2♣︎"
+      expect(combination.to_s).to eq "type: kiker, cards: A♠︎,3♠︎,K♣︎,Q♥︎,2♣︎"
     end
   end
 end

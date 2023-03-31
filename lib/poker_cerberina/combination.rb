@@ -9,7 +9,7 @@ class PokerCerberina::Combination
 
   def ==(other)
     return false if type != other.type
-    cards - other.cards == []
+    cards.kind_of?(Array) ? cards - other.cards == [] : cards == other.cards
   end
 
   def <=>(other)
@@ -20,20 +20,21 @@ class PokerCerberina::Combination
     end
   end
 
-  def print
-    printed_cards = cards.map { |card| card.print }
-    "type: #{type}, cards: #{printed_cards.join(",")}"
+  def to_s
+    cards.kind_of?(Array) ? "type: #{type}, cards: #{cards.join(",")}" : "type: #{type}, cards: #{cards}"
   end
 end
 
 private
 
 def compare_equal_types(other)
-  if ["pair", "set", "quad"].include? type
-    cards.first.rank <=> other.cards.first.rank
+  if type == "top_card"
+    cards <=> other.cards
+  elsif ["pair", "set", "quad"].include? type
+    cards.first <=> other.cards.first
   elsif ["royal_flush", "straight_flush", "straight"].include? type
     cards.sort.last <=> other.cards.sort.last
-  elsif ["flush", "kiker"].include? type
+  elsif ["flush"].include? type
     compare_two_arrays(cards, other.cards)
   elsif type == "full_house"
     self_set_rank = rank_of_group(cards, 3).first

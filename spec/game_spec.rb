@@ -1,6 +1,10 @@
 require "rspec"
 require "poker_cerberina"
 
+def card(rank, suit)
+  PokerCerberina::Card.new(rank, suit)
+end
+
 describe PokerCerberina::Game do
   describe "#initialize" do
     context "raise an exception if number of players out of range" do
@@ -38,6 +42,20 @@ describe PokerCerberina::Game do
       game.players.each do |player|
         expect(player.hand.size).to eq 2
       end
+    end
+  end
+  #PokerCerberina::Game.new(2)
+  describe "#winning_player" do
+    it "" do
+      players = []
+      player_a = PokerCerberina::Player.new
+      player_a.hand = PokerCerberina::Hand.new ([card("7", "♠︎"), card("10", "♣︎"), card("10", "♦︎"), card("9", "♠︎"), card("4", "♣︎")])
+      players << player_a
+      player_b = PokerCerberina::Player.new
+      player_b.hand = PokerCerberina::Hand.new ([card("7", "♣︎"), card("7", "♥︎"), card("4", "♦︎"), card("9", "♥︎"), card("A", "♥︎")])
+      players << player_b
+      players.max_by(&:best_combination)
+      expect(players.max_by(&:best_combination)).to eq player_a
     end
   end
 end

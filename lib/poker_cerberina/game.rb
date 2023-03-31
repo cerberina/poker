@@ -19,7 +19,6 @@ class PokerCerberina::Game
   end
 
   def winning_player
-    best_combinations = players.map { |player| player.best_combination }
-    players[best_combinations.index(best_combinations.max)]
+    players.max_by(&:best_combination)
   end
 end

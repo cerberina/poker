@@ -4,8 +4,8 @@ require "poker_cerberina"
 describe PokerCerberina::CombinationSearch do
   let(:search) { described_class.new(hand) }
 
-  describe "#find_kiker" do
-    subject(:find_kiker) { search.find_kiker(combination) }
+  describe "#find_top_card" do
+    subject(:find_top_card) { search.find_top_card }
 
     let(:combination) { nil }
 
@@ -20,19 +20,14 @@ describe PokerCerberina::CombinationSearch do
         ])
       end
       let(:expected_combination) do
-        PokerCerberina::Combination.new("kiker", hand.cards)
+        PokerCerberina::Combination.new("top_card", PokerCerberina::Card.new("A", "♠︎"))
       end
 
-      it "finds the kiker" do
-        expect(find_kiker).to eq(expected_combination)
+      it "finds the top_card" do
+        expect(find_top_card).to eq(expected_combination)
       end
     end
-    context "when other combination exists in the hand" do
-      let(:combination) do
-        PokerCerberina::Combination.new("pair",
-                                        [PokerCerberina::Card.new("K", "♠︎"),
-                                         PokerCerberina::Card.new("K", "♣︎")])
-      end
+    context "when several cards with max rank exists in the hand" do
       let(:hand) do
         PokerCerberina::Hand.new([
           PokerCerberina::Card.new("2", "♠︎"),
@@ -43,15 +38,61 @@ describe PokerCerberina::CombinationSearch do
         ])
       end
       let(:expected_combination) do
-        PokerCerberina::Combination.new("kiker", [PokerCerberina::Card.new("2", "♠︎"),
-                                                  PokerCerberina::Card.new("Q", "♥︎"),
-                                                  PokerCerberina::Card.new("2", "♣︎")])
+        PokerCerberina::Combination.new("top_card", PokerCerberina::Card.new("K", "♠︎"))
       end
-      it "finds the kiker in the rest of cards(except existed combination)" do
-        expect(find_kiker).to eq(expected_combination)
+      it "finds the top_card" do
+        expect(find_top_card).to eq(expected_combination)
       end
     end
   end
+  # describe "#find_kiker" do
+  #   subject(:find_kiker) { search.find_kiker(combination) }
+
+  #   let(:combination) { nil }
+
+  #   context "when all cards are different ranks" do
+  #     let(:hand) do
+  #       PokerCerberina::Hand.new([
+  #         PokerCerberina::Card.new("A", "♠︎"),
+  #         PokerCerberina::Card.new("3", "♠︎"),
+  #         PokerCerberina::Card.new("K", "♣︎"),
+  #         PokerCerberina::Card.new("Q", "♥︎"),
+  #         PokerCerberina::Card.new("2", "♣︎"),
+  #       ])
+  #     end
+  #     let(:expected_combination) do
+  #       PokerCerberina::Combination.new("kiker", hand.cards)
+  #     end
+
+  #     it "finds the kiker" do
+  #       expect(find_kiker).to eq(expected_combination)
+  #     end
+  #   end
+  #   context "when other combination exists in the hand" do
+  #     let(:combination) do
+  #       PokerCerberina::Combination.new("pair",
+  #                                       [PokerCerberina::Card.new("K", "♠︎"),
+  #                                        PokerCerberina::Card.new("K", "♣︎")])
+  #     end
+  #     let(:hand) do
+  #       PokerCerberina::Hand.new([
+  #         PokerCerberina::Card.new("2", "♠︎"),
+  #         PokerCerberina::Card.new("K", "♠︎"),
+  #         PokerCerberina::Card.new("K", "♣︎"),
+  #         PokerCerberina::Card.new("Q", "♥︎"),
+  #         PokerCerberina::Card.new("2", "♣︎"),
+  #       ])
+  #     end
+  #     let(:expected_combination) do
+  #       PokerCerberina::Combination.new("kiker", [PokerCerberina::Card.new("2", "♠︎"),
+  #                                                 PokerCerberina::Card.new("Q", "♥︎"),
+  #                                                 PokerCerberina::Card.new("2", "♣︎")])
+  #     end
+  #     it "finds the kiker in the rest of cards(except existed combination)" do
+  #       expect(find_kiker).to eq(expected_combination)
+  #     end
+  #   end
+  # end
   describe "#find_pairs" do
     subject(:find_pairs) { search.find_pairs }
     context "when hand contains pair of cards with the same ranks" do
@@ -557,7 +598,7 @@ describe PokerCerberina::CombinationSearch do
         expect(find_straight_flush).to eq(expected_combination)
       end
     end
-    context "when hand contains sequense of 5 cards by ranks but not and all these cards have same suit" do
+    context "when hand contains sequense of 5 cards by ranks but not all these cards have same suit" do
       let(:hand) do
         PokerCerberina::Hand.new([
           PokerCerberina::Card.new("K", "♦︎"),

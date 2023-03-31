@@ -8,10 +8,10 @@ game = PokerCerberina::Game.new(number_of_players)
 game.deck.shuffle
 game.deal(5)
 game.players.each do |player|
-  puts "#{player.name}."
+  puts "#{player.name}. Cards: #{player.hand}"
   puts "The best combination is: 
-                                #{player.best_combination.print}"
+                                #{player.best_combination}"
 end
 
-puts "The game winner is #{game.winning_player.name} 
-with combination #{player.best_combination.print}"
+puts "The game winner is #{game.winning_player.name}"
+puts " with combination #{game.winning_player.best_combination}"

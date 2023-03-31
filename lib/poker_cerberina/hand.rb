@@ -15,4 +15,16 @@ class PokerCerberina::Hand
   def size
     cards.size
   end
+
+  def to_s
+    "#{cards.join(",")}"
+  end
+
+  def find_kiker(combination = nil)
+    if combination
+      PokerCerberina::Combination.new("kiker", hand.cards - combination.cards)
+    else
+      PokerCerberina::Combination.new("kiker", hand.cards)
+    end
+  end
 end

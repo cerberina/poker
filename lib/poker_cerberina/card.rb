@@ -28,7 +28,7 @@ class PokerCerberina::Card
     return false
   end
 
-  def print
+  def to_s
     "#{rank}#{suit}"
   end
 
